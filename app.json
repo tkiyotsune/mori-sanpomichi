@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mori-kobito",
-    "slug": "mori-kobito",
+    "name": "もりのさんぽみち",
+    "slug": "mori-sanpomichi",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,10 +9,15 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#90D47D"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.kiyo.morisanpomichi",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSUserTrackingUsageDescription": "この識別子は、あなたに関連性の高い広告を表示するために使用されます。"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -21,10 +26,36 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "com.google.android.gms.permission.AD_ID",
+        "com.google.android.gms.permission.AD_ID"
+      ],
+      "package": "com.kiyo.morisanpomichi"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-localization",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "iosAppId": "ca-app-pub-6637778639316730~9515140971",
+          "userTrackingUsageDescription": "この識別子は、あなたに関連性の高い広告を表示するために使用されます。"
+        }
+      ],
+      [
+        "expo-tracking-transparency",
+        {
+          "userTrackingPermission": "この識別子は、あなたに関連性の高い広告を表示するために使用されます。"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8dacadbf-d22e-47c1-9c41-be2676368a7f"
+      }
     }
   }
 }

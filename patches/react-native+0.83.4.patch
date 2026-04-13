@@ -1,0 +1,48 @@
+diff --git a/node_modules/react-native/scripts/replace-rncore-version.js b/node_modules/react-native/scripts/replace-rncore-version.js
+index 55ce8aa..be03698 100644
+--- a/node_modules/react-native/scripts/replace-rncore-version.js
++++ b/node_modules/react-native/scripts/replace-rncore-version.js
+@@ -98,7 +98,7 @@ function replaceRNCoreConfiguration(
+ 
+     // Move from temp to final location
+     console.log('Preparing the final location', finalLocation);
+-    fs.rmSync(finalLocation, {force: true, recursive: true});
++    try { fs.rmSync(finalLocation, {force: true, recursive: true}); } catch(e) { spawnSync("rm", ["-rf", finalLocation], {stdio: "inherit"}); }
+ 
+     // Use mv for an atomic-ish replacement. If the final location is on the
+     // same filesystem as tmpDir this is a rename; otherwise it falls back to
+@@ -122,7 +122,7 @@ function replaceRNCoreConfiguration(
+     }
+   } finally {
+     // Clean up temp directory
+-    fs.rmSync(tmpDir, {force: true, recursive: true});
++    try { fs.rmSync(tmpDir, {force: true, recursive: true}); } catch(e) { spawnSync("rm", ["-rf", tmpDir], {stdio: "inherit"}); }
+   }
+ }
+ 
+diff --git a/node_modules/react-native/sdks/hermes-engine/utils/replace_hermes_version.js b/node_modules/react-native/sdks/hermes-engine/utils/replace_hermes_version.js
+index 18ef387..7553ed6 100644
+--- a/node_modules/react-native/sdks/hermes-engine/utils/replace_hermes_version.js
++++ b/node_modules/react-native/sdks/hermes-engine/utils/replace_hermes_version.js
+@@ -58,7 +58,7 @@ function replaceHermesConfiguration(configuration, version, podsRoot) {
+ 
+   const finalLocation = 'hermes-engine';
+   console.log('Preparing the final location');
+-  fs.rmSync(finalLocation, {force: true, recursive: true});
++  try { fs.rmSync(finalLocation, {force: true, recursive: true}); } catch(e) { spawnSync("rm", ["-rf", finalLocation], {stdio: "inherit"}); }
+   fs.mkdirSync(finalLocation, {recursive: true});
+ 
+   console.log('Extracting the tarball');
+diff --git a/node_modules/react-native/third-party-podspecs/replace_dependencies_version.js b/node_modules/react-native/third-party-podspecs/replace_dependencies_version.js
+index 66fa888..991c10f 100644
+--- a/node_modules/react-native/third-party-podspecs/replace_dependencies_version.js
++++ b/node_modules/react-native/third-party-podspecs/replace_dependencies_version.js
+@@ -62,7 +62,7 @@ function replaceRNDepsConfiguration(
+ 
+   const finalLocation = 'ReactNativeDependencies/framework';
+   console.log('Preparing the final location', finalLocation);
+-  fs.rmSync(finalLocation, {force: true, recursive: true});
++  try { fs.rmSync(finalLocation, {force: true, recursive: true}); } catch(e) { spawnSync("rm", ["-rf", finalLocation], {stdio: "inherit"}); }
+   fs.mkdirSync(finalLocation, {recursive: true});
+ 
+   console.log('Extracting the tarball', tarballURLPath);
