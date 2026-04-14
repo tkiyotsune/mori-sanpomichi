@@ -30,7 +30,7 @@ for (let i = 0; i < LINE_COUNT; i++) {
 }
 
 // River flow lines — dark blue horizontals at random positions/lengths
-const RIVER_FLOW_LINE_COUNT = 14;
+const RIVER_FLOW_LINE_COUNT = 7;
 const RIVER_FLOW_LINES: { x: number; w: number; yFrac: number; opacity: number; lh: number }[] =
   Array.from({ length: RIVER_FLOW_LINE_COUNT }, (_, i) => {
     const spread = i / (RIVER_FLOW_LINE_COUNT - 1); // 0→1, evenly distributed top-to-bottom
@@ -40,7 +40,7 @@ const RIVER_FLOW_LINES: { x: number; w: number; yFrac: number; opacity: number; 
       w: Math.round(SW * (0.22 + (i * 0.131 + 0.07) % 0.52)),
       yFrac: Math.min(0.05 + spread * 0.88 + jitter, 0.93),
       opacity: 0.35 + (i % 5) * 0.06,
-      lh: 1.5 + (i % 3) * 0.75,
+      lh: 3 + (i % 3) * 1.5,
     };
   });
 
