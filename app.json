@@ -19,23 +19,6 @@
         "NSUserTrackingUsageDescription": "この識別子は、あなたに関連性の高い広告を表示するために使用されます。"
       }
     },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
-      },
-      "predictiveBackGestureEnabled": false,
-      "permissions": [
-        "com.google.android.gms.permission.AD_ID",
-        "com.google.android.gms.permission.AD_ID"
-      ],
-      "package": "com.kiyo.morisanpomichi"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
     "plugins": [
       "expo-localization",
       [
@@ -54,8 +37,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "8dacadbf-d22e-47c1-9c41-be2676368a7f"
+        "projectId": "6aef0f05-993a-4afd-a483-ca96ce162b08"
       }
-    }
+    },
+    "owner": "kiyotsune"
   }
 }
