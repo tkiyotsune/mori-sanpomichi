@@ -10,7 +10,7 @@ import { TestIds } from 'react-native-google-mobile-ads';
  * receive "No Fill" responses and show nothing. Keep this false during all
  * TestFlight / local testing.
  */
-const USE_PRODUCTION_ADS = false;
+const USE_PRODUCTION_ADS = true;
 
 const PROD_BANNER_IOS = 'ca-app-pub-6637778639316730/1388480778';
 
