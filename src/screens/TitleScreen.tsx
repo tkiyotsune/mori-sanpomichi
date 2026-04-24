@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleContainer: {
-    alignItems: 'center',
+    alignSelf: 'stretch',
   },
   titleMain: {
     fontSize: 42,
@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 3,
     letterSpacing: 3,
+    textAlign: 'center',
   },
   titleSub: {
     fontSize: 13,
@@ -83,6 +84,7 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 3,
     opacity: 0.8,
+    textAlign: 'center',
   },
   characterContainer: {
     marginTop: 30,
