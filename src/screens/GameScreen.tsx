@@ -6,6 +6,8 @@ import ScoreDisplay from '../components/game/ScoreDisplay';
 import ControlButtons from '../components/game/ControlButtons';
 import { useGameLoop } from '../hooks/useGameLoop';
 import * as Haptics from 'expo-haptics';
+import i18n from '../i18n';
+import { COLORS } from '../constants/colors';
 import type { CharacterType } from '../types';
 
 const { width: SW, height: SH } = Dimensions.get('window');
@@ -61,11 +63,69 @@ export default function GameScreen({ characterType, onGameOver }: Props) {
     spin: new Animated.Value(0),
   }))).current;
   const [showEffect, setShowEffect] = useState(false);
+  const [countdownLabel, setCountdownLabel] = useState<string | null>('3');
+  const countdownAnim = useRef(new Animated.Value(0)).current;
+  const tipAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    startGame();
-    return () => stopGame();
-  }, [startGame, stopGame]);
+    let cancelled = false;
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+
+    Animated.timing(tipAnim, {
+      toValue: 1,
+      duration: 350,
+      useNativeDriver: true,
+    }).start();
+
+    const showStep = (label: string, delay: number, isGo: boolean) => {
+      timeouts.push(
+        setTimeout(() => {
+          if (cancelled) return;
+          setCountdownLabel(label);
+          Haptics.impactAsync(
+            isGo ? Haptics.ImpactFeedbackStyle.Medium : Haptics.ImpactFeedbackStyle.Light
+          );
+          countdownAnim.setValue(0);
+          Animated.timing(countdownAnim, {
+            toValue: 1,
+            duration: 380,
+            easing: Easing.out(Easing.back(1.6)),
+            useNativeDriver: true,
+          }).start();
+        }, delay)
+      );
+    };
+
+    showStep('3', 0, false);
+    showStep('2', 800, false);
+    showStep('1', 1600, false);
+    showStep(i18n.t('countdownGo'), 2400, true);
+
+    timeouts.push(
+      setTimeout(() => {
+        if (cancelled) return;
+        Animated.timing(tipAnim, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: true,
+        }).start();
+      }, 2400)
+    );
+
+    timeouts.push(
+      setTimeout(() => {
+        if (cancelled) return;
+        setCountdownLabel(null);
+        startGame();
+      }, 2900)
+    );
+
+    return () => {
+      cancelled = true;
+      timeouts.forEach(clearTimeout);
+      stopGame();
+    };
+  }, [startGame, stopGame, countdownAnim, tipAnim]);
 
   useEffect(() => {
     if (isGameOver) {
@@ -149,6 +209,49 @@ export default function GameScreen({ characterType, onGameOver }: Props) {
       <ScoreDisplay score={displayScore} />
       {!isGameOver && <ControlButtons onPress={handlePress} />}
 
+      {/* Countdown / tutorial overlay */}
+      {countdownLabel !== null && (
+        <View style={styles.countdownOverlay} pointerEvents="none">
+          <Animated.Text
+            style={[
+              styles.countdownTip,
+              {
+                opacity: tipAnim,
+                transform: [
+                  {
+                    translateY: tipAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [-8, 0],
+                    }),
+                  },
+                ],
+              },
+            ]}
+          >
+            {`◀  ${i18n.t('countdownTip')}  ▶`}
+          </Animated.Text>
+          <Animated.Text
+            style={[
+              styles.countdownNumber,
+              /^[0-9]+$/.test(countdownLabel) ? null : styles.countdownGoLabel,
+              {
+                opacity: countdownAnim,
+                transform: [
+                  {
+                    scale: countdownAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.4, 1.15],
+                    }),
+                  },
+                ],
+              },
+            ]}
+          >
+            {countdownLabel}
+          </Animated.Text>
+        </View>
+      )}
+
       {/* Forest fade overlay */}
       {showEffect && (
         <Animated.View
@@ -202,5 +305,34 @@ const styles = StyleSheet.create({
   fade: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: '#2A3A28',
+  },
+  countdownOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  countdownTip: {
+    position: 'absolute',
+    top: SH * 0.28,
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.white,
+    letterSpacing: 2,
+    textShadowColor: '#00000055',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 4,
+  },
+  countdownNumber: {
+    fontSize: 120,
+    fontWeight: '900',
+    color: COLORS.white,
+    letterSpacing: 2,
+    textShadowColor: '#00000066',
+    textShadowOffset: { width: 2, height: 3 },
+    textShadowRadius: 8,
+  },
+  countdownGoLabel: {
+    fontSize: 56,
+    letterSpacing: 4,
   },
 });

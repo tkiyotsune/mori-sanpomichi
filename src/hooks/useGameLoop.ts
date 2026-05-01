@@ -282,7 +282,9 @@ export function useGameLoop(characterType: CharacterType) {
   }, []);
 
   const startGame = useCallback(() => {
+    const carryDirection = stateRef.current.direction;
     stateRef.current = createInitialState();
+    stateRef.current.direction = carryDirection;
     frameCountRef.current = 0;
     setDisplayScore(0);
     setIsGameOver(false);
